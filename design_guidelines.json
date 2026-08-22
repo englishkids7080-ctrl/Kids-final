@@ -1,0 +1,73 @@
+{
+  "theme_archetype": "Vibrant Play (Professional Kids EdTech)",
+  "typography": {
+    "heading_font": "Fredoka, sans-serif",
+    "body_font": "Nunito, sans-serif",
+    "instructions": "Replace 'Fraunces' and 'Inter' with 'Fredoka' (Headings) and 'Nunito' (Body). Add Google Fonts import: @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap');. These fonts are friendly, highly legible, and eliminate the 'formal/corporate' look while remaining highly professional for EdTech."
+  },
+  "colors": {
+    "primary": "#0EA5E9",
+    "primary_dark": "#0284C7",
+    "secondary": "#FACC15",
+    "secondary_dark": "#CA8A04",
+    "accent_success": "#34D399",
+    "accent_error": "#FB7185",
+    "background": "#F8FAFC",
+    "surface": "#FFFFFF",
+    "text_main": "#0F172A",
+    "text_muted": "#64748B",
+    "border": "#E2E8F0"
+  },
+  "visual_enhancers": {
+    "shadows": "Use chunky 3D-style bottom borders/shadows for buttons instead of standard drop shadows (e.g., border-bottom-width: 4px). Use soft ambient shadows for static cards.",
+    "borders": "Use 2px solid borders (border-slate-200) around cards, nodes, and game panels to define boundaries clearly.",
+    "radii": "Use maximum rounding: rounded-2xl or rounded-3xl for cards, rounded-full for buttons."
+  },
+  "component_guidelines": {
+    "buttons": "Implement the 'EdTech Bounce' button style: background-color: var(--primary); color: white; border-radius: 999px; border: 2px solid var(--primary-dark); border-bottom-width: 4px; transition: transform 0.1s, border-width 0.1s. On active: transform: translateY(2px); border-bottom-width: 2px.",
+    "map_cards": "Level nodes should be flex rows, rounded-3xl, white background, 2px border-slate-200. Left side: real photo thumbnail (rounded-2xl). Right side: Bilingual Title (EN bold, ES smaller/muted), stars, and a chunky Play button.",
+    "certificate": "A4 Landscape format. REMOVE 'SENA' completely. Add 'English Kids' (text only) as the issuing entity using Fredoka font. Use a clean white background with gold (#FACC15) corner accents (e.g., using absolute positioned divs with 4px border on two sides). Include lines for 'Teacher' and 'Director' signatures, and a gold seal badge.",
+    "game_header": "Header should feature a real photo thumbnail, the bilingual title, and a score progress bar with a bright yellow fill.",
+    "bilingual_text": "EN text must be the primary focus (e.g., text-lg, font-bold, text-slate-800). ES text must act as a support subtitle directly below (e.g., text-sm, font-medium, text-slate-500)."
+  },
+  "layouts": {
+    "landing": "Keep the editorial/dossier sections but use wavy dividers or soft background color blocks to separate sections. Maintain a max-width for readability.",
+    "level_map": "Vertical scrolling path with dashed SVG or CSS line connecting the level cards.",
+    "game_screens": "Centered, single-column max-w-3xl. White game boards floating on a soft slate-50 background."
+  },
+  "motion": {
+    "buttons": "Bouncy interaction on click/active.",
+    "cards": "Hover states should lift the card slightly (-translate-y-1) and change border color to primary.",
+    "feedback": "Use a gentle shake animation for wrong answers and a pop/scale animation for correct ones."
+  },
+  "accessibility": {
+    "color_contrast": "Ensure white text on light buttons (like yellow) has sufficient contrast; use text-slate-900 on yellow buttons.",
+    "tap_targets": "Minimum 48x48px for all interactive buttons and cards to accommodate young children's motor skills."
+  },
+  "image_urls": {
+    "level_1_alphabet": "https://images.unsplash.com/photo-1558907353-ceb54f3882ed?auto=format&fit=crop&w=600&q=80",
+    "level_2_numbers": "https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?auto=format&fit=crop&w=600&q=80",
+    "level_3_family": "https://images.unsplash.com/photo-1614144477821-9daf217ae100?auto=format&fit=crop&w=600&q=80",
+    "level_4_animals": "https://images.pexels.com/photos/31865647/pexels-photo-31865647.jpeg?auto=format&fit=crop&w=600&q=80",
+    "level_5_colors": "https://images.unsplash.com/photo-1525909002-1b05e0c869d8?auto=format&fit=crop&w=600&q=80",
+    "level_6_food": "https://images.unsplash.com/photo-1505253716362-afaea1d3d1af?auto=format&fit=crop&w=600&q=80",
+    "level_7_quiz": "https://images.unsplash.com/photo-1516979187457-637abb4f9353?auto=format&fit=crop&w=600&q=80",
+    "instructions": "Use these specific real photo URLs for the thumbnails and hero images in each level to meet the user's request for real image bank photos."
+  },
+  "instructions_to_main_agent": [
+    "In App.css, replace the Fraunces and Inter fonts with Fredoka and Nunito.",
+    "Completely overwrite the App.css root CSS variables to use the new Vibrant Play palette (Primary Sky Blue, Secondary Yellow, Slate Text). Remove the dark pine and muted gold.",
+    "Refactor ALL .btn classes in App.css to have the 'chunky 3D' border-bottom effect instead of standard box-shadows.",
+    "In the Certificate component, completely remove the 'SENA' text and branding. Change the main heading to 'English Kids' using text-only. Add gold corner borders to the .cert-sheet.",
+    "Ensure every single bilingual text instance in the games and level map displays English as primary (large, bold, dark) and Spanish underneath (smaller, lighter color, perhaps medium weight).",
+    "Update the Map Node cards (.map-node) to use rounded-3xl, thick 2px borders, and place the real photo thumbnails from the image_urls list.",
+    "Expand the game content: The user specifically requested longer games. You MUST expand the data arrays/logic for each level to include more questions/pairs (e.g., 6-8 color questions, larger memory grid or multiple rounds, more matching pairs) so the gameplay isn't too short.",
+    "Keep core React state mechanisms working, but feel free to expand the state data to support longer game rounds."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "You MUST NOT apply universal transition (e.g., transition: all). Add transitions for specific properties only.",
+    "Create depth through layered design elements and bottom borders.",
+    "Use data-testid on all interactive elements.",
+    "Prioritize generous padding and large border radii for a kid-friendly tactile feel."
+  ]
+}

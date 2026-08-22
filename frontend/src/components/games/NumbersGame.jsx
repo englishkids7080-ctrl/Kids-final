@@ -17,7 +17,7 @@ export default function NumbersGame({ level }) {
       leftTitle="Number · Número"
       rightTitle="Word · Palabra en inglés"
       renderLeft={(it) => (
-        <span style={{ fontFamily: "'Fraunces',serif", fontSize: "2rem", fontWeight: 600 }}>
+        <span style={{ fontFamily: "'Fredoka',sans-serif", fontSize: "2rem", fontWeight: 600 }}>
           {it.number}
         </span>
       )}

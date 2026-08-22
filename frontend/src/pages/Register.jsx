@@ -47,7 +47,7 @@ export default function Register() {
   return (
     <div className="auth-shell" data-testid="register-page">
       <aside className="auth-hero">
-        <div className="eyebrow">Proyecto SENA · Aprendizaje lúdico</div>
+        <div className="eyebrow">English Kids · Aprende inglés jugando</div>
         <div>
           <h1>Crea tu cuenta y <em>comienza el viaje</em></h1>
           <p>
@@ -68,7 +68,7 @@ export default function Register() {
             <span className="mark">EK</span>
             <div>
               <div className="name">English Kids</div>
-              <div className="sub">Proyecto SENA</div>
+              <div className="sub">Aprende inglés jugando</div>
             </div>
           </div>
 

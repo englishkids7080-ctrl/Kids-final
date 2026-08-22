@@ -39,7 +39,7 @@ export default function Login() {
   return (
     <div className="auth-shell" data-testid="login-page">
       <aside className="auth-hero">
-        <div className="eyebrow">Proyecto SENA · Aprendizaje lúdico</div>
+        <div className="eyebrow">English Kids · Aprende inglés jugando</div>
         <div>
           <h1>
             Un viaje de <em>7 niveles</em> para conocer el inglés desde niños
@@ -50,8 +50,8 @@ export default function Login() {
           </p>
         </div>
         <div className="footer-note">
-          <strong style={{ color: "rgba(241,243,236,.85)" }}>English Kids</strong> · Institución
-          Educativa Gonzalo Rivera Laguardo · SENA
+          <strong style={{ color: "rgba(241,243,236,.85)" }}>English Kids</strong> · Aprendizaje del
+          inglés para primera infancia
         </div>
         <span className="decor">EK</span>
       </aside>
@@ -62,7 +62,7 @@ export default function Login() {
             <span className="mark">EK</span>
             <div>
               <div className="name">English Kids</div>
-              <div className="sub">Proyecto SENA</div>
+              <div className="sub">Aprende inglés jugando</div>
             </div>
           </div>
 

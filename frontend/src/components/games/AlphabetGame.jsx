@@ -18,7 +18,7 @@ export default function AlphabetGame({ level }) {
       leftTitle="Letter · Letra"
       rightTitle="Word · Palabra"
       renderLeft={(it) => (
-        <span style={{ fontFamily: "'Fraunces',serif", fontSize: "1.8rem", fontWeight: 600 }}>
+        <span style={{ fontFamily: "'Fredoka',sans-serif", fontSize: "1.8rem", fontWeight: 600 }}>
           {it.letter}
         </span>
       )}
