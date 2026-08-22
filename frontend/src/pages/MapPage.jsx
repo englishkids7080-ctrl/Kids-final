@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/context/AuthContext";
 import { LEVELS, LEVEL_IMAGES } from "@/lib/gameData";
+import { computeBadges } from "@/lib/badges";
 import { sfx } from "@/lib/sound";
 
 function Stars({ n }) {
@@ -19,6 +20,8 @@ export default function MapPage() {
   const { progress, unlockedLevel, user } = useAuth();
 
   const progressByLevel = Object.fromEntries(progress.map((p) => [p.level_id, p]));
+  const badges = computeBadges(progress);
+  const earnedBadges = badges.filter((b) => b.earned);
 
   const isCompleted = (id) => !!progressByLevel[id];
   const isUnlocked = (id) => id <= unlockedLevel || isCompleted(id);
@@ -41,6 +44,27 @@ export default function MapPage() {
             categoría léxica y desbloquea el siguiente. Consigue las tres estrellas para dominar
             el nivel.
           </p>
+        </div>
+
+        <div className="badge-strip" data-testid="map-badge-strip">
+          <div className="badge-strip-info">
+            <span className="badge-strip-title">🏅 Mis medallas</span>
+            <span className="badge-strip-count" data-testid="map-badge-count">
+              {earnedBadges.length} / {badges.length}
+            </span>
+          </div>
+          <div className="badge-strip-chips">
+            {earnedBadges.length ? (
+              earnedBadges.slice(0, 7).map((b) => (
+                <span key={b.id} className="badge-chip" title={`${b.title} · ${b.desc}`}>{b.icon}</span>
+              ))
+            ) : (
+              <span className="badge-strip-empty">Aún no tienes medallas. ¡Juega para ganarlas! · Play to earn badges!</span>
+            )}
+          </div>
+          <button className="btn btn-ghost badge-strip-btn" onClick={() => nav("/badges")} data-testid="map-badges-link">
+            Ver todas →
+          </button>
         </div>
 
         <div className="map-path">

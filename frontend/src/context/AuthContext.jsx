@@ -1,5 +1,8 @@
-import { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, useMemo, useRef } from "react";
+import { toast } from "sonner";
 import api from "@/api/client";
+import { sfx } from "@/lib/sound";
+import { earnedBadgeIds, getBadge } from "@/lib/badges";
 
 const AuthContext = createContext(null);
 
@@ -8,17 +11,22 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState([]);
   const [unlockedLevel, setUnlockedLevel] = useState(1);
+  const progressRef = useRef([]);
 
   const fetchProgress = useCallback(async () => {
     try {
       const { data } = await api.get("/progress");
-      setProgress(data.progress || []);
+      const list = data.progress || [];
+      setProgress(list);
       setUnlockedLevel(data.unlocked_level || 1);
+      progressRef.current = list;
+      return list;
     } catch (err) {
-      // Not fatal — user might just be unauthenticated. Reset state and log for debug.
       console.warn("fetchProgress failed:", err?.message || err);
       setProgress([]);
       setUnlockedLevel(1);
+      progressRef.current = [];
+      return [];
     }
   }, []);
 
@@ -28,7 +36,6 @@ export function AuthProvider({ children }) {
       setUser(data);
       await fetchProgress();
     } catch (err) {
-      // 401 on first load is expected for unauthenticated visitors.
       if (err?.response?.status && err.response.status !== 401) {
         console.warn("bootstrap failed:", err?.message || err);
       }
@@ -65,14 +72,26 @@ export function AuthProvider({ children }) {
     setUser(null);
     setProgress([]);
     setUnlockedLevel(1);
+    progressRef.current = [];
   }, []);
 
   const saveProgress = useCallback(async ({ level_id, score, max_score, stars }) => {
+    const before = earnedBadgeIds(progressRef.current);
     try {
       await api.post("/progress", { level_id, score, max_score, stars });
-      await fetchProgress();
+      const list = await fetchProgress();
+      const after = earnedBadgeIds(list);
+      // Celebrate any newly-unlocked badges.
+      after.forEach((id) => {
+        if (!before.has(id)) {
+          const b = getBadge(id);
+          if (b) {
+            sfx.badge();
+            toast.success(`🏅 ¡Nueva medalla: ${b.title}!`, { description: b.desc });
+          }
+        }
+      });
     } catch (err) {
-      // Client-side progression still works if the save fails — just log.
       console.warn("saveProgress failed:", err?.message || err);
     }
   }, [fetchProgress]);

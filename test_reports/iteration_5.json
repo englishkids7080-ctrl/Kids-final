@@ -1,0 +1,33 @@
+{
+  "summary": "Frontend-only regression of new features (Practice Mode, Badges, Dark Mode). Registered two fresh students via /register UI and executed real gameplay for Food quiz (level 6), Alphabet PairMatch (level 1) and Colors (level 3). Verified badge derivation, map badge strip counter, dark-mode toggle+persistence, and certificate rebrand. Practice-mode isolation from POST /api/progress verified end-to-end by intercepting network requests.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "getInitialTheme() defaults to 'light' and the useEffect always writes data-theme attribute (never absent). The spec allowed 'absent/light or dark' -- current implementation always sets one of ['light','dark']. This is fine functionally.",
+    "AuthContext.saveProgress: 'before' snapshot is captured from progressRef.current BEFORE awaiting POST; but during the await another saveProgress could double-fire toast. Low risk in current UX (single-game flow) but worth guarding.",
+    "PairMatchGame.handlePractice filters original items by failed Set; because wrongPair marks BOTH sides of the mismatched pair as failed, the practice pool can grow larger than intended (e.g. 1 wrong click => 2 items in practice, which matched observed behavior 'Practicar los errores (2)'). Consider tracking only the intended-left target item to keep 'N wrong = N practice items' semantics consistent with QuizGame/ColorsGame."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "not tested", "frontend": "100%"},
+  "test_credentials": "admin@englishkids.com / admin1234 (not used); ephemeral test users registered per run.",
+  "seed_data_creation": "For Food quiz practice test, seeded levels 2-5 via POST /api/progress to unlock level 6, then cleared the request-tracker before the actual test.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "verified_features": [
+    "Register flow lands on /landing; /map reachable",
+    "Initial /badges shows 7 cards all in 'locked' class",
+    "Dark mode: click toggles html[data-theme] between light/dark, localStorage 'ek-theme' updated, persists across reload",
+    "Food quiz (level 6, 18Q): played through with 15 wrong. Result panel shows result-practice with '(15)'. Clicking replayed only 15 items with progress text 'Práctica · Question · Pregunta 1 / 15' and practice-tag on subsequent result. Exactly 1 POST /api/progress observed (initial run), zero POSTs during practice. Saved level 6 progress (score=3, stars=0) unchanged after practice.",
+    "Alphabet PairMatch (level 1): introduced 1 wrong pair click => result-practice shows (2). Completing level saves progress (score=26/26, stars=2). first_step badge earned (class contains 'earned'); map-badge-count updates from '0 / 7' to '1 / 7'.",
+    "Colors (level 3): one intentional wrong => result-practice (1). Practice replays only that color; completing practice with 0 wrong shows practice-tag and NO result-practice button. Zero POST /api/progress during practice.",
+    "Certificate page still shows 'English Kids' and no 'SENA' branding."
+  ],
+  "context_for_next_testing_agent": "Toast '¡Nueva medalla!' fires via sonner but auto-dismisses; DOM query after game returned 0 toast elements (expected). To assert toast text directly, intercept toast events at emit-time (patch window.__sonner or listen for [data-sonner-toast] mutations during saveProgress). PairMatch's 'failed' Set includes both sides of a mismatch, so 1 bad click yields wrongCount=2 in the practice button label -- confirmed behavior, flagged as code-review item. Gold_star badge could not be validated in this run because deliberate wrong matches capped level 1 at 2 stars.",
+  "rca of the issue": "No blocking issues found."
+}

@@ -14,13 +14,15 @@ function shuffle(arr) {
 }
 
 /**
- * Reusable multiple-choice quiz component (bilingual).
+ * Reusable multiple-choice quiz component (bilingual + practice mode).
  * questions: [{ emoji, q, qEs, options, answer, answerEs? }]
  */
 export default function QuizGame({ level, questions }) {
   const { saveProgress } = useAuth();
-  const total = questions.length;
   const nextLevel = level.id < 7 ? level.id + 1 : null;
+
+  const [active, setActive] = useState(questions);
+  const total = active.length;
 
   const [i, setI] = useState(0);
   const [score, setScore] = useState(0);
@@ -28,28 +30,32 @@ export default function QuizGame({ level, questions }) {
   const [correct, setCorrect] = useState(null);
   const [feedback, setFeedback] = useState({ msg: "", ok: null });
   const [shuffledOpts, setShuffledOpts] = useState([]);
+  const [wrong, setWrong] = useState([]);
+  const [practiceMode, setPracticeMode] = useState(false);
   const [done, setDone] = useState(false);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => { restart(); }, [questions]);
+  useEffect(() => { setActive(questions); setPracticeMode(false); }, [questions]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => { restart(); }, [active]);
 
   useEffect(() => {
-    if (!done && questions[i]) {
-      setShuffledOpts(shuffle(questions[i].options));
+    if (!done && active[i]) {
+      setShuffledOpts(shuffle(active[i].options));
       setChosen(null); setCorrect(null); setFeedback({ msg: "", ok: null });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [i]);
 
   const restart = () => {
-    setI(0); setScore(0); setChosen(null); setCorrect(null);
+    setI(0); setScore(0); setChosen(null); setCorrect(null); setWrong([]);
     setFeedback({ msg: "", ok: null }); setDone(false);
-    if (questions[0]) setShuffledOpts(shuffle(questions[0].options));
+    if (active[0]) setShuffledOpts(shuffle(active[0].options));
   };
 
   const pick = (opt) => {
     if (chosen) return;
-    const q = questions[i];
+    const q = active[i];
     setChosen(opt);
     setCorrect(q.answer);
     if (opt === q.answer) {
@@ -60,6 +66,7 @@ export default function QuizGame({ level, questions }) {
     } else {
       sfx.wrong();
       speak(q.answer);
+      setWrong((w) => [...w, q]);
       setFeedback({ msg: `Correct answer: "${q.answer}" · La respuesta correcta es "${q.answer}"`, ok: false });
     }
     setTimeout(() => {
@@ -78,19 +85,36 @@ export default function QuizGame({ level, questions }) {
 
   const finish = (finalScore) => {
     setDone(true);
-    const pct = finalScore / total;
-    let s = 0;
-    if (pct >= 0.9) s = 3; else if (pct >= 0.6) s = 2; else if (pct >= 0.3) s = 1;
     sfx.win();
-    saveProgress({ level_id: level.id, score: finalScore, max_score: total, stars: s });
+    if (!practiceMode) {
+      const pct = finalScore / total;
+      let s = 0;
+      if (pct >= 0.9) s = 3; else if (pct >= 0.6) s = 2; else if (pct >= 0.3) s = 1;
+      saveProgress({ level_id: level.id, score: finalScore, max_score: total, stars: s });
+    }
   };
 
-  const q = questions[i];
+  const handleRetry = () => {
+    setPracticeMode(false);
+    setActive(questions);
+    restart();
+  };
+
+  const handlePractice = () => {
+    const w = [...wrong];
+    if (!w.length) return;
+    setPracticeMode(true);
+    setActive(w); // triggers restart via effect
+  };
+
+  const q = active[i];
 
   return (
     <>
       <div className="score-bar" data-testid="quiz-score-bar">
-        <span data-testid="quiz-progress-text">Question · Pregunta {Math.min(i + 1, total)} / {total}</span>
+        <span data-testid="quiz-progress-text">
+          {practiceMode ? "Práctica · " : ""}Question · Pregunta {Math.min(i + 1, total)} / {total}
+        </span>
         <span data-testid="quiz-score">Points · Puntos: {score}</span>
       </div>
       <div className="progress-track">
@@ -145,7 +169,10 @@ export default function QuizGame({ level, questions }) {
           max={total}
           stars={stars}
           next={nextLevel}
-          onRetry={restart}
+          onRetry={handleRetry}
+          onPractice={handlePractice}
+          wrongCount={wrong.length}
+          practiceMode={practiceMode}
         />
       )}
     </>

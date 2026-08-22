@@ -52,6 +52,12 @@ export const sfx = {
   click() {
     tone(420, 0.04, "square", 0.04);
   },
+  badge() {
+    tone(784, 0.12, "sine", 0.08);
+    tone(988, 0.12, "sine", 0.08, 0.12);
+    tone(1319, 0.14, "sine", 0.08, 0.24);
+    tone(1568, 0.3, "sine", 0.08, 0.38);
+  },
 };
 
 export function setSoundEnabled(v) {

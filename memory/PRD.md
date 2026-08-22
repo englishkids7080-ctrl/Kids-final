@@ -32,7 +32,13 @@ App web para que niños pequeños aprendan inglés. Pedidos del usuario:
 - 2026-08-22: Rediseño "Vibrant Play" (design_agent) aplicado en App.css — paleta azul cielo + amarillo + verde, fuentes Fredoka/Nunito, botones 3D redondeados, tarjetas rounded, estados correcto=verde / error=rosa. Sin cambios de lógica.
 
 ## Backlog / remaining
-- P1: Audio real (voces nativas) en lugar de SpeechSynthesis del navegador.
+- 2026-08-22: Medallas/recompensas (`lib/badges.js`, `pages/Badges.jsx`, strip en `MapPage`) — 7 medallas derivadas del progreso (primer nivel, 3 estrellas, racha de 3, coleccionista, 5 niveles, 7 niveles, perfección). Toast + sonido al ganar una nueva.
+- 2026-08-22: Voz mejorada (`lib/tts.js`) — selección de mejor voz inglesa del navegador, ritmo más lento y tono amable; auto al aparecer (colores) y al tocar 🔊 / palabras en parejas.
+- 2026-08-22: Modo "Practicar los errores" en Quiz/Colores/Parejas — repite solo lo fallado y NO sobreescribe el progreso guardado (verificado por interceptación de red).
+- 2026-08-22: Modo oscuro con interruptor en el navbar (persiste en localStorage `ek-theme`, `data-theme` en <html>, sin parpadeo). Feedback de color reforzado en botones y fichas al hover/press.
+
+### Pendientes
+- P1: Voces nativas reales (TTS de servicio) en vez de SpeechSynthesis del navegador.
 - P2: Panel de docente para ver desempeño por grupo.
 - P2: Más categorías léxicas / niveles.
 

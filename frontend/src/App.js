@@ -8,6 +8,7 @@ import Landing from "@/pages/Landing";
 import MapPage from "@/pages/MapPage";
 import Level from "@/pages/Level";
 import Certificate from "@/pages/Certificate";
+import Badges from "@/pages/Badges";
 import "@/App.css";
 
 function ProtectedRoute({ children }) {
@@ -37,6 +38,7 @@ function AppRoutes() {
       <Route path="/map" element={<ProtectedRoute><MapPage /></ProtectedRoute>} />
       <Route path="/level/:id" element={<ProtectedRoute><Level /></ProtectedRoute>} />
       <Route path="/certificate" element={<ProtectedRoute><Certificate /></ProtectedRoute>} />
+      <Route path="/badges" element={<ProtectedRoute><Badges /></ProtectedRoute>} />
       <Route path="/" element={<Navigate to="/login" replace />} />
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
