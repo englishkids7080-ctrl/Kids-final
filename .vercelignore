@@ -1,0 +1,6 @@
+memory
+tests
+test_reports
+backend/tests
+**/__pycache__
+frontend/node_modules

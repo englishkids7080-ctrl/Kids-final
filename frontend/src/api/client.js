@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+// Empty/undefined -> same-origin ("/api"), which is what we use on Vercel.
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "";
 
 // Auth is handled entirely through httpOnly `access_token` cookie set by the backend.
 // Frontend never touches the token directly (no localStorage, no memory copy) — this
